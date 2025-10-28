@@ -96,10 +96,7 @@ export default function AdminDashboard() {
     }, {} as Record<string, number>),
     commonMisSizedItems: responses.reduce((acc, r) => {
       if (r.misSizedItems) {
-        r.misSizedItems.split(',').forEach((item: string) => {
-          const trimmed = item.trim();
-          acc[trimmed] = (acc[trimmed] || 0) + 1;
-        });
+        acc[r.misSizedItems] = (acc[r.misSizedItems] || 0) + 1;
       }
       return acc;
     }, {} as Record<string, number>)
