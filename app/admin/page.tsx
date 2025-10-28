@@ -1,9 +1,9 @@
-import { ModularAdminDashboard } from "@/components/ModularAdminDashboard";
+import { InsightsAdminDashboard } from "@/components/InsightsAdminDashboard";
 
 export const metadata = {
   title: "Admin Dashboard - Survey Analytics",
 };
 
 export default function AdminPage() {
-  return <ModularAdminDashboard />;
+  return <InsightsAdminDashboard />;
 }
