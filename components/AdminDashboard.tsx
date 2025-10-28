@@ -187,42 +187,42 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="container mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Survey Analytics Dashboard</h1>
-          <p className="text-muted-foreground">Virtual Try-On Market Research Analysis</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">Survey Analytics Dashboard</h1>
+          <p className="text-muted-foreground text-sm sm:text-base">Virtual Try-On Market Research Analysis</p>
         </div>
-        <div className="flex items-center gap-4">
-          <Button onClick={exportData} variant="outline" size="sm">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+          <Button onClick={exportData} variant="outline" size="sm" className="w-full sm:w-auto">
             <Download className="h-4 w-4 mr-2" />
             Export Data
           </Button>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-muted-foreground text-center sm:text-left">
             Total Responses: <span className="font-semibold">{totalResponses}</span>
           </div>
         </div>
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 bg-white border">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="demographics">Demographics</TabsTrigger>
-          <TabsTrigger value="pain-points">Pain Points</TabsTrigger>
-          <TabsTrigger value="features">Feature Analysis</TabsTrigger>
-          <TabsTrigger value="individual">Individual Results</TabsTrigger>
+      <Tabs defaultValue="overview" className="space-y-4 sm:space-y-6">
+        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 bg-white border h-auto">
+          <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
+          <TabsTrigger value="demographics" className="text-xs sm:text-sm">Demographics</TabsTrigger>
+          <TabsTrigger value="pain-points" className="text-xs sm:text-sm">Pain Points</TabsTrigger>
+          <TabsTrigger value="features" className="text-xs sm:text-sm">Features</TabsTrigger>
+          <TabsTrigger value="individual" className="text-xs sm:text-sm">Individual</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
+        <TabsContent value="overview" className="space-y-4 sm:space-y-6">
           {/* Key Metrics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Upload Willingness</CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-medium">Upload Willingness</CardTitle>
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{uploadPercentage.toFixed(1)}%</div>
+                <div className="text-lg sm:text-2xl font-bold">{uploadPercentage.toFixed(1)}%</div>
                 <Progress value={uploadPercentage} className="mt-2" />
                 <p className="text-xs text-muted-foreground mt-1">
                   {willingToUpload} out of {totalResponses} users
@@ -232,11 +232,11 @@ export default function AdminDashboard() {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Social Media Shoppers</CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-medium">Social Media Shoppers</CardTitle>
                 <ShoppingBag className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
+                <div className="text-lg sm:text-2xl font-bold">
                   {totalResponses > 0 ? ((socialMediaShoppers / totalResponses) * 100).toFixed(1) : 0}%
                 </div>
                 <Progress value={totalResponses > 0 ? (socialMediaShoppers / totalResponses) * 100 : 0} className="mt-2" />
@@ -248,11 +248,11 @@ export default function AdminDashboard() {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Purchase Confidence</CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-medium">Purchase Confidence</CardTitle>
                 <Star className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
+                <div className="text-lg sm:text-2xl font-bold">
                   {totalResponses > 0 ? ((highConfidenceAfterTryOn / totalResponses) * 100).toFixed(1) : 0}%
                 </div>
                 <Progress value={totalResponses > 0 ? (highConfidenceAfterTryOn / totalResponses) * 100 : 0} className="mt-2" />
@@ -264,11 +264,11 @@ export default function AdminDashboard() {
 
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">App Adoption</CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-medium">App Adoption</CardTitle>
                 <AlertTriangle className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">
+                <div className="text-lg sm:text-2xl font-bold">
                   {totalResponses > 0 ? ((likelyToUseApp / totalResponses) * 100).toFixed(1) : 0}%
                 </div>
                 <Progress value={totalResponses > 0 ? (likelyToUseApp / totalResponses) * 100 : 0} className="mt-2" />
@@ -297,17 +297,17 @@ export default function AdminDashboard() {
           </div>
 
           {/* Quick Charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Age Distribution</CardTitle>
+                <CardTitle className="text-base sm:text-lg">Age Distribution</CardTitle>
               </CardHeader>
               <CardContent>
-                <ChartContainer config={{}} className="h-[200px]">
+                <ChartContainer config={{}} className="h-[200px] sm:h-[250px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={ageChartData}>
-                      <XAxis dataKey="age" />
-                      <YAxis />
+                      <XAxis dataKey="age" className="text-xs" />
+                      <YAxis className="text-xs" />
                       <ChartTooltip content={<ChartTooltipContent />} />
                       <Bar dataKey="count" fill="#0088FE" />
                     </BarChart>
@@ -318,17 +318,17 @@ export default function AdminDashboard() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Gender Distribution</CardTitle>
+                <CardTitle className="text-base sm:text-lg">Gender Distribution</CardTitle>
               </CardHeader>
               <CardContent>
-                <ChartContainer config={{}} className="h-[200px]">
+                <ChartContainer config={{}} className="h-[200px] sm:h-[250px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
                         data={genderChartData}
                         cx="50%"
                         cy="50%"
-                        outerRadius={80}
+                        outerRadius={60}
                         fill="#8884d8"
                         dataKey="count"
                         label={({ gender, percentage }) => `${gender}: ${percentage}%`}
@@ -346,24 +346,24 @@ export default function AdminDashboard() {
           </div>
         </TabsContent>
 
-        <TabsContent value="demographics" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <TabsContent value="demographics" className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Age Groups</CardTitle>
-                <CardDescription>Distribution of survey respondents by age</CardDescription>
+                <CardTitle className="text-base sm:text-lg">Age Groups</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Distribution of survey respondents by age</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {Object.entries(demographics.ageGroups).map(([age, count]) => (
                     <div key={age} className="flex items-center justify-between">
-                      <span className="text-sm font-medium">{age}</span>
+                      <span className="text-xs sm:text-sm font-medium">{age}</span>
                       <div className="flex items-center gap-2">
                         <Progress 
                           value={(count / totalResponses) * 100} 
-                          className="w-20" 
+                          className="w-16 sm:w-20" 
                         />
-                        <span className="text-sm text-muted-foreground w-12">
+                        <span className="text-xs text-muted-foreground w-10 sm:w-12">
                           {count} ({((count / totalResponses) * 100).toFixed(1)}%)
                         </span>
                       </div>
@@ -375,20 +375,20 @@ export default function AdminDashboard() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Gender Distribution</CardTitle>
-                <CardDescription>Survey respondents by gender identity</CardDescription>
+                <CardTitle className="text-base sm:text-lg">Gender Distribution</CardTitle>
+                <CardDescription className="text-xs sm:text-sm">Survey respondents by gender identity</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {Object.entries(demographics.genderDistribution).map(([gender, count]) => (
                     <div key={gender} className="flex items-center justify-between">
-                      <span className="text-sm font-medium capitalize">{gender}</span>
+                      <span className="text-xs sm:text-sm font-medium capitalize">{gender}</span>
                       <div className="flex items-center gap-2">
                         <Progress 
                           value={(count / totalResponses) * 100} 
-                          className="w-20" 
+                          className="w-16 sm:w-20" 
                         />
-                        <span className="text-sm text-muted-foreground w-12">
+                        <span className="text-xs text-muted-foreground w-10 sm:w-12">
                           {count} ({((count / totalResponses) * 100).toFixed(1)}%)
                         </span>
                       </div>
@@ -717,65 +717,65 @@ export default function AdminDashboard() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="individual" className="space-y-6">
+        <TabsContent value="individual" className="space-y-4 sm:space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Individual Survey Responses</CardTitle>
-              <CardDescription>
+              <CardTitle className="text-base sm:text-lg">Individual Survey Responses</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Detailed view of each survey response - {totalResponses} total responses
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="rounded-md border">
+              <div className="rounded-md border overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-[100px]">ID</TableHead>
-                      <TableHead>Age</TableHead>
-                      <TableHead>Gender</TableHead>
-                      <TableHead>Shopping Pref</TableHead>
-                      <TableHead>Upload Willing</TableHead>
-                      <TableHead>Return Freq</TableHead>
-                      <TableHead>Confidence</TableHead>
-                      <TableHead>App Likelihood</TableHead>
-                      <TableHead>Completed</TableHead>
-                      <TableHead className="w-[50px]">Details</TableHead>
+                      <TableHead className="w-[60px] text-xs">ID</TableHead>
+                      <TableHead className="text-xs">Age</TableHead>
+                      <TableHead className="text-xs">Gender</TableHead>
+                      <TableHead className="text-xs hidden sm:table-cell">Shopping Pref</TableHead>
+                      <TableHead className="text-xs">Upload</TableHead>
+                      <TableHead className="text-xs hidden md:table-cell">Return Freq</TableHead>
+                      <TableHead className="text-xs">Confidence</TableHead>
+                      <TableHead className="text-xs hidden lg:table-cell">App Likelihood</TableHead>
+                      <TableHead className="text-xs hidden sm:table-cell">Completed</TableHead>
+                      <TableHead className="w-[50px] text-xs">Details</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {responses.map((response, index) => (
                       <TableRow key={response._id}>
-                        <TableCell className="font-medium">#{index + 1}</TableCell>
-                        <TableCell>{response.age}</TableCell>
-                        <TableCell className="capitalize">{response.gender}</TableCell>
-                        <TableCell>
-                          <Badge variant="outline">
+                        <TableCell className="font-medium text-xs">#{index + 1}</TableCell>
+                        <TableCell className="text-xs">{response.age}</TableCell>
+                        <TableCell className="capitalize text-xs">{response.gender}</TableCell>
+                        <TableCell className="text-xs hidden sm:table-cell">
+                          <Badge variant="outline" className="text-xs">
                             {response.shoppingPreference?.replace('-', ' ')}
                           </Badge>
                         </TableCell>
-                        <TableCell>
-                          <Badge variant={response.imageUploadWillingness === 'Yes' ? 'default' : 'secondary'}>
+                        <TableCell className="text-xs">
+                          <Badge variant={response.imageUploadWillingness === 'Yes' ? 'default' : 'secondary'} className="text-xs">
                             {response.imageUploadWillingness}
                           </Badge>
                         </TableCell>
-                        <TableCell>{response.returnsProblem}</TableCell>
-                        <TableCell>
+                        <TableCell className="text-xs hidden md:table-cell">{response.returnsProblem}</TableCell>
+                        <TableCell className="text-xs">
                           <Badge variant={
                             response.clothesFit === 'Very well' ? 'default' :
                             response.clothesFit === 'Somewhat well' ? 'secondary' : 'destructive'
-                          }>
+                          } className="text-xs">
                             {response.clothesFit}
                           </Badge>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="text-xs hidden lg:table-cell">
                           <Badge variant={
                             response.purchaseConfidence === '5' || response.purchaseConfidence === '4' ? 'default' :
                             response.purchaseConfidence === '3' ? 'secondary' : 'destructive'
-                          }>
+                          } className="text-xs">
                             {response.purchaseConfidence}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-xs text-muted-foreground">
+                        <TableCell className="text-xs text-muted-foreground hidden sm:table-cell">
                           {response.completedAt ? new Date(response.completedAt).toLocaleDateString() : 'N/A'}
                         </TableCell>
                         <TableCell>
@@ -786,9 +786,9 @@ export default function AdminDashboard() {
                               setSelectedResponse(response);
                               setIsModalOpen(true);
                             }}
-                            className="h-8 w-8 p-0"
+                            className="h-6 w-6 p-0"
                           >
-                            <Info className="h-4 w-4" />
+                            <Info className="h-3 w-3" />
                           </Button>
                         </TableCell>
                       </TableRow>
@@ -803,37 +803,37 @@ export default function AdminDashboard() {
 
       {/* User Details Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto mx-3 sm:mx-auto">
           <DialogHeader>
-            <DialogTitle>Complete Survey Response</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-base sm:text-lg">Complete Survey Response</DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm">
               Detailed view of user submission #{responses?.findIndex(r => r._id === selectedResponse?._id) + 1}
             </DialogDescription>
           </DialogHeader>
           
           {selectedResponse && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Basic Information */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Basic Information</CardTitle>
+                  <CardTitle className="text-base sm:text-lg">Basic Information</CardTitle>
                 </CardHeader>
-                <CardContent className="grid grid-cols-2 gap-4">
+                <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Age</label>
-                    <p className="text-sm">{selectedResponse.age || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">Age</label>
+                    <p className="text-xs sm:text-sm">{selectedResponse.age || 'Not provided'}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Gender</label>
-                    <p className="text-sm capitalize">{selectedResponse.gender || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">Gender</label>
+                    <p className="text-xs sm:text-sm capitalize">{selectedResponse.gender || 'Not provided'}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Shopping Preference</label>
-                    <p className="text-sm">{selectedResponse.shoppingPreference?.replace('-', ' ') || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">Shopping Preference</label>
+                    <p className="text-xs sm:text-sm">{selectedResponse.shoppingPreference?.replace('-', ' ') || 'Not provided'}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Online Shopping Frequency</label>
-                    <p className="text-sm">{selectedResponse.onlineShoppingFrequency || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">Online Shopping Frequency</label>
+                    <p className="text-xs sm:text-sm">{selectedResponse.onlineShoppingFrequency || 'Not provided'}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -841,24 +841,24 @@ export default function AdminDashboard() {
               {/* Clothing & Fit Experience */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Clothing & Fit Experience</CardTitle>
+                  <CardTitle className="text-base sm:text-lg">Clothing & Fit Experience</CardTitle>
                 </CardHeader>
-                <CardContent className="grid grid-cols-2 gap-4">
+                <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">How well do clothes fit?</label>
-                    <p className="text-sm">{selectedResponse.clothesFit || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">How well do clothes fit?</label>
+                    <p className="text-xs sm:text-sm">{selectedResponse.clothesFit || 'Not provided'}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Returns Problem</label>
-                    <p className="text-sm">{selectedResponse.returnsProblem || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">Returns Problem</label>
+                    <p className="text-xs sm:text-sm">{selectedResponse.returnsProblem || 'Not provided'}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Most Mis-sized Items</label>
-                    <p className="text-sm">{selectedResponse.misSizedItems || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">Most Mis-sized Items</label>
+                    <p className="text-xs sm:text-sm">{selectedResponse.misSizedItems || 'Not provided'}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Purchase Confidence</label>
-                    <p className="text-sm">{selectedResponse.purchaseConfidence || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">Purchase Confidence</label>
+                    <p className="text-xs sm:text-sm">{selectedResponse.purchaseConfidence || 'Not provided'}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -866,24 +866,24 @@ export default function AdminDashboard() {
               {/* Virtual Try-On Features */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Virtual Try-On Features</CardTitle>
+                  <CardTitle className="text-base sm:text-lg">Virtual Try-On Features</CardTitle>
                 </CardHeader>
-                <CardContent className="grid grid-cols-2 gap-4">
+                <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Body Shape Accuracy Importance</label>
-                    <p className="text-sm">{selectedResponse.tryOnBodyType || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">Body Shape Accuracy Importance</label>
+                    <p className="text-xs sm:text-sm">{selectedResponse.tryOnBodyType || 'Not provided'}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Skin Tone Accuracy Importance</label>
-                    <p className="text-sm">{selectedResponse.skinToneAccuracy || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">Skin Tone Accuracy Importance</label>
+                    <p className="text-xs sm:text-sm">{selectedResponse.skinToneAccuracy || 'Not provided'}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Acceptable Wait Time</label>
-                    <p className="text-sm">{selectedResponse.speedExpectation || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">Acceptable Wait Time</label>
+                    <p className="text-xs sm:text-sm">{selectedResponse.speedExpectation || 'Not provided'}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Expected Usage Frequency</label>
-                    <p className="text-sm">{selectedResponse.tryOnUseFrequency || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">Expected Usage Frequency</label>
+                    <p className="text-xs sm:text-sm">{selectedResponse.tryOnUseFrequency || 'Not provided'}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -891,12 +891,12 @@ export default function AdminDashboard() {
               {/* Privacy & Trust */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Privacy & Trust</CardTitle>
+                  <CardTitle className="text-base sm:text-lg">Privacy & Trust</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
+                <CardContent className="space-y-3 sm:space-y-4">
                   <div>
-                    <label className="text-sm font-medium text-muted-foreground">Willing to Upload Images</label>
-                    <p className="text-sm">{selectedResponse.imageUploadWillingness || 'Not provided'}</p>
+                    <label className="text-xs sm:text-sm font-medium text-muted-foreground">Willing to Upload Images</label>
+                    <p className="text-xs sm:text-sm">{selectedResponse.imageUploadWillingness || 'Not provided'}</p>
                   </div>
                   
                   {selectedResponse.trustIssues && Array.isArray(selectedResponse.trustIssues) && selectedResponse.trustIssues.length > 0 && (
