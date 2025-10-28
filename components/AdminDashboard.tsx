@@ -130,14 +130,16 @@ export default function AdminDashboard() {
   };
 
   // Key metrics for overview
-  const willingToUpload = responses.filter(r => r.imageUploadWillingness === "Yes").length;
+  const willingToUpload = responses.filter(r => r.imageUploadWillingness === "yes-upload").length;
   const uploadPercentage = totalResponses > 0 ? (willingToUpload / totalResponses) * 100 : 0;
-  const socialMediaShoppers = responses.filter(r => r.socialMediaShopping === "Yes").length;
+  const socialMediaShoppers = responses.filter(r => 
+    r.socialMediaShopping === "yes-social" || r.socialMediaShopping === "sometimes-social"
+  ).length;
   const highConfidenceAfterTryOn = responses.filter(r => 
-    r.tryOnFromSocialMedia === "5" || r.tryOnFromSocialMedia === "4"
+    r.tryOnFromSocialMedia === "much-more-likely" || r.tryOnFromSocialMedia === "somewhat-more-likely"
   ).length;
   const likelyToUseApp = responses.filter(r => 
-    r.purchaseConfidence === "5" || r.purchaseConfidence === "4"
+    r.purchaseConfidence === "very-confident" || r.purchaseConfidence === "somewhat-confident"
   ).length;
 
   // Chart data preparation
