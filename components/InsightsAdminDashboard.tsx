@@ -219,6 +219,91 @@ export function InsightsAdminDashboard() {
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
 
+  // Export data function
+  const exportToCSV = () => {
+    if (!responses || responses.length === 0) {
+      alert('No data to export');
+      return;
+    }
+
+    // Define CSV headers
+    const headers = [
+      'ID',
+      'Creation Time',
+      'Completed At',
+      'Age',
+      'Gender',
+      'Shopping Preference',
+      'Online Shopping Frequency',
+      'Find Clothes',
+      'Social Media Shopping',
+      'Social Media Platforms',
+      'Clothes Fit',
+      'Returns Problem',
+      'Mis-Sized Items',
+      'Trust Issues',
+      'Color Matching Uncertainty',
+      'Image Upload Willingness',
+      'Try On From Social Media',
+      'Try On Use Frequency',
+      'Try On Body Type',
+      'Try On Concerns',
+      'Speed Expectation',
+      'Skin Tone Accuracy',
+      'Virtual Try On',
+      'AR Realism',
+      'Purchase Confidence',
+      'User Agent'
+    ];
+
+    // Convert responses to CSV format
+    const csvData = responses.map(response => [
+      response._id,
+      new Date(response._creationTime).toISOString(),
+      response.completedAt ? new Date(response.completedAt).toISOString() : '',
+      response.age || '',
+      response.gender || '',
+      response.shoppingPreference || '',
+      response.onlineShoppingFrequency || '',
+      response.findClothes || '',
+      response.socialMediaShopping || '',
+      response.socialMediaPlatforms ? response.socialMediaPlatforms.join('; ') : '',
+      response.clothesFit || '',
+      response.returnsProblem || '',
+      response.misSizedItems || '',
+      response.trustIssues ? response.trustIssues.join('; ') : '',
+      response.colorMatchingUncertainty || '',
+      response.imageUploadWillingness || '',
+      response.tryOnFromSocialMedia || '',
+      response.tryOnUseFrequency || '',
+      response.tryOnBodyType || '',
+      response.tryOnConcerns ? response.tryOnConcerns.join('; ') : '',
+      response.speedExpectation || '',
+      response.skinToneAccuracy || '',
+      response.virtualTryOn || '',
+      response.arRealism || '',
+      response.purchaseConfidence || '',
+      response.userAgent || ''
+    ]);
+
+    // Create CSV content
+    const csvContent = [
+      headers.join(','),
+      ...csvData.map(row => row.map(field => `"${field}"`).join(','))
+    ].join('\n');
+
+    // Create and download file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `survey-responses-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -230,7 +315,7 @@ export function InsightsAdminDashboard() {
               <p className="mt-1 text-sm text-gray-500">Virtual Try-On Market Research Analysis</p>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={exportToCSV}>
                 <Download className="h-4 w-4 mr-2" />
                 Export Data
               </Button>
