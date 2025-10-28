@@ -282,32 +282,27 @@ export default function TypeFormSurvey() {
                 )}
 
                 {currentQuestion.type === "checkbox" && (
-                  <div className="space-y-4">
+                  <div className="space-y-4" role="group" aria-labelledby={`question-${currentQuestion.id}`}>
                     {currentQuestion.options.map((option) => (
-                      <div
+                      <label
                         key={option.id}
-                        onClick={() => {
-                          const isChecked = (answers[currentQuestion.id] || []).includes(option.id);
-                          handleCheckboxChange(option.id, !isChecked);
-                        }}
-                        className="flex items-center space-x-3 p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-[#4169E1] dark:hover:border-[#6495ED] hover:bg-slate-50 dark:hover:bg-slate-900 cursor-pointer transition-all"
+                        htmlFor={`${currentQuestion.id}-${option.id}`}
+                        className="flex items-center space-x-3 p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-[#4169E1] dark:hover:border-[#6495ED] hover:bg-slate-50 dark:hover:bg-slate-900 transition-all cursor-pointer"
                       >
                         <Checkbox
-                          id={option.id}
+                          id={`${currentQuestion.id}-${option.id}`}
                           checked={
                             (answers[currentQuestion.id] || []).includes(option.id) || false
                           }
                           onCheckedChange={(checked) =>
                             handleCheckboxChange(option.id, checked as boolean)
                           }
+                          aria-describedby={currentQuestion.description ? `question-${currentQuestion.id}-desc` : undefined}
                         />
-                        <Label
-                          htmlFor={option.id}
-                          className="font-normal cursor-pointer text-base flex-1"
-                        >
+                        <span className="font-normal text-base flex-1">
                           {option.label}
-                        </Label>
-                      </div>
+                        </span>
+                      </label>
                     ))}
                   </div>
                 )}
