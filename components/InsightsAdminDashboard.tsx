@@ -16,6 +16,13 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { SurveyDataTable } from "@/components/survey-data-table";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
   Bar,
   BarChart,
   CartesianGrid,
@@ -110,6 +117,7 @@ function bucketAge(ageStr?: string): string {
 
 export function InsightsAdminDashboard() {
   const responses = useQuery(api.myFunctions.getAllResponses) as SurveyResponse[] | undefined;
+  const [selectedResponse, setSelectedResponse] = React.useState<SurveyResponse | null>(null);
 
   const total = responses?.length ?? 0;
 
@@ -200,6 +208,35 @@ export function InsightsAdminDashboard() {
       .slice(0, 8)
       .map(([name, value]) => ({ name, value }));
 
+    // Trust issues
+    const trustMap = new Map<string, number>();
+    for (const r of list) {
+      for (const t of r.trustIssues ?? []) {
+        trustMap.set(t, (trustMap.get(t) ?? 0) + 1);
+      }
+    }
+    const trustIssuesData = Array.from(trustMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8)
+      .map(([name, value]) => ({ name, value }));
+
+    // Mission-aligned KPIs
+    const virtualTryOnInterest = list.filter((r) => isPositive(r.virtualTryOn)).length;
+    const arRealismImportant = list.filter((r) => isPositive(r.arRealism)).length;
+    const skinToneAccuracyImportant = list.filter((r) => isPositive(r.skinToneAccuracy)).length;
+    const fastSpeedExpectation = list.filter((r) => {
+      const v = toLower(r.speedExpectation);
+      return v.includes("fast") || v.includes("30") || v.includes("sec") || v.includes("instant");
+    }).length;
+    const colorUncertaintyFlagged = list.filter((r) => {
+      const v = toLower(r.colorMatchingUncertainty);
+      return v.includes("uncertain") || v.includes("yes") || v.includes("often") || v.includes("sometimes");
+    }).length;
+    const returnsFrequent = list.filter((r) => {
+      const v = toLower(r.returnsProblem);
+      return v.includes("often") || v.includes("frequent") || v.includes("yes");
+    }).length;
+
     return {
       uploadYes,
       confidentYes,
@@ -214,13 +251,18 @@ export function InsightsAdminDashboard() {
       fitConfidenceData,
       platformData,
       concernsData,
+      trustIssuesData,
+      virtualTryOnInterest,
+      arRealismImportant,
+      skinToneAccuracyImportant,
+      fastSpeedExpectation,
+      colorUncertaintyFlagged,
+      returnsFrequent,
     };
   }, [responses]);
 
-  const onViewDetails = (r: SurveyResponse) => {
-    // Hook up a detailed dialog in the future; for now, log to console.
-    console.log("View details:", r);
-  };
+  const onViewDetails = (r: SurveyResponse) => setSelectedResponse(r);
+  const closeDialog = () => setSelectedResponse(null);
 
   if (!responses) {
     return (
@@ -298,6 +340,65 @@ export function InsightsAdminDashboard() {
                   <Badge variant="outline">{metrics.adoptionCohort}/{total}</Badge>
                 </div>
                 <Progress value={percent(metrics.adoptionCohort, total)} className="mt-2" />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Mission-aligned KPIs */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Virtual Try-On Interest</CardTitle>
+                <CardDescription>Willing to use VTO</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div className="text-3xl font-bold">{percent(metrics.virtualTryOnInterest, total)}%</div>
+                  <Badge variant="outline">{metrics.virtualTryOnInterest}/{total}</Badge>
+                </div>
+                <Progress value={percent(metrics.virtualTryOnInterest, total)} className="mt-2" />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>AR Realism Importance</CardTitle>
+                <CardDescription>Realistic visuals matter</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div className="text-3xl font-bold">{percent(metrics.arRealismImportant, total)}%</div>
+                  <Badge variant="outline">{metrics.arRealismImportant}/{total}</Badge>
+                </div>
+                <Progress value={percent(metrics.arRealismImportant, total)} className="mt-2" />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Skin Tone Accuracy</CardTitle>
+                <CardDescription>Important to respondents</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div className="text-3xl font-bold">{percent(metrics.skinToneAccuracyImportant, total)}%</div>
+                  <Badge variant="outline">{metrics.skinToneAccuracyImportant}/{total}</Badge>
+                </div>
+                <Progress value={percent(metrics.skinToneAccuracyImportant, total)} className="mt-2" />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Speed Expectation (≤30s)</CardTitle>
+                <CardDescription>Expect fast conversion</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div className="text-3xl font-bold">{percent(metrics.fastSpeedExpectation, total)}%</div>
+                  <Badge variant="outline">{metrics.fastSpeedExpectation}/{total}</Badge>
+                </div>
+                <Progress value={percent(metrics.fastSpeedExpectation, total)} className="mt-2" />
               </CardContent>
             </Card>
           </div>
@@ -503,6 +604,25 @@ export function InsightsAdminDashboard() {
               </ResponsiveContainer>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Trust Issues</CardTitle>
+              <CardDescription>Top reasons users are skeptical</CardDescription>
+            </CardHeader>
+            <CardContent className="h-[280px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={metrics.trustIssuesData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" tick={{ fontSize: 12 }} />
+                  <YAxis tick={{ fontSize: 12 }} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="value" fill="#a855f7" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* Responses */}
@@ -510,6 +630,142 @@ export function InsightsAdminDashboard() {
           <SurveyDataTable responses={responses} onViewDetails={onViewDetails} />
         </TabsContent>
       </Tabs>
+
+      {/* Response Details Dialog */}
+      <Dialog open={!!selectedResponse} onOpenChange={closeDialog}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Survey Response Details</DialogTitle>
+            <DialogDescription>
+              Detailed view of survey response #{selectedResponse?._id.slice(-6)}
+            </DialogDescription>
+          </DialogHeader>
+          {selectedResponse && (
+            <div className="grid gap-6">
+              {/* Demographics */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Demographics</CardTitle>
+                </CardHeader>
+                <CardContent className="grid grid-cols-2 gap-4">
+                  <div>
+                    <span className="font-medium">Age:</span>
+                    <Badge variant="secondary" className="ml-2">
+                      {selectedResponse.age || "Not specified"}
+                    </Badge>
+                  </div>
+                  <div>
+                    <span className="font-medium">Gender:</span>
+                    <Badge variant="secondary" className="ml-2">
+                      {selectedResponse.gender || "Not specified"}
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Preferences & Confidence */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Preferences & Confidence</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <span className="font-medium">Shopping Preference:</span>
+                    <Badge variant="outline" className="ml-2">
+                      {selectedResponse.shoppingPreference || "Not specified"}
+                    </Badge>
+                  </div>
+                  <div>
+                    <span className="font-medium">Purchase Confidence:</span>
+                    <Badge variant="outline" className="ml-2">
+                      {selectedResponse.purchaseConfidence || "Not specified"}
+                    </Badge>
+                  </div>
+                  <div>
+                    <span className="font-medium">Virtual Try-On Interest:</span>
+                    <Badge variant="outline" className="ml-2">
+                      {selectedResponse.virtualTryOn || "Not specified"}
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* AR & Quality */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>AR & Quality Expectations</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <span className="font-medium">AR Realism Importance:</span>
+                    <Badge variant="outline" className="ml-2">
+                      {selectedResponse.arRealism || "Not specified"}
+                    </Badge>
+                  </div>
+                  <div>
+                    <span className="font-medium">Skin Tone Accuracy:</span>
+                    <Badge variant="outline" className="ml-2">
+                      {selectedResponse.skinToneAccuracy || "Not specified"}
+                    </Badge>
+                  </div>
+                  <div>
+                    <span className="font-medium">Speed Expectation:</span>
+                    <Badge variant="outline" className="ml-2">
+                      {selectedResponse.speedExpectation || "Not specified"}
+                    </Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Social & Platforms */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Social & Platforms</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <span className="font-medium">Social Media Shopping:</span>
+                    <Badge variant="outline" className="ml-2">
+                      {selectedResponse.socialMediaShopping || "Not specified"}
+                    </Badge>
+                  </div>
+                  {selectedResponse.socialMediaPlatforms && selectedResponse.socialMediaPlatforms.length > 0 && (
+                    <div>
+                      <span className="font-medium">Platforms:</span>
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {selectedResponse.socialMediaPlatforms.map((p, i) => (
+                          <Badge key={i} variant="secondary">{p}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Metadata */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Response Metadata</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div>
+                    <span className="font-medium">Completed At:</span>
+                    <span className="ml-2 text-sm text-muted-foreground">
+                      {new Date(selectedResponse.completedAt).toLocaleString()}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="font-medium">Response ID:</span>
+                    <span className="ml-2 font-mono text-sm text-muted-foreground">
+                      {selectedResponse._id}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
