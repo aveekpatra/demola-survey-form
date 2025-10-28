@@ -11,7 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-import { Loader2, Users, ShoppingBag, AlertTriangle, Star, Download, Info } from "lucide-react";
+import { Loader2, Users, ShoppingBag, AlertTriangle, Star, Download, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -47,7 +47,6 @@ interface SurveyResponse {
 export default function AdminDashboard() {
   const responses = useQuery(api.myFunctions.getAllResponses);
   const [selectedResponse, setSelectedResponse] = useState<SurveyResponse | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!responses) {
     return (
@@ -187,151 +186,249 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="container mx-auto p-3 sm:p-6 space-y-4 sm:space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold">Survey Analytics Dashboard</h1>
-          <p className="text-muted-foreground text-sm sm:text-base">Virtual Try-On Market Research Analysis</p>
-        </div>
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-          <Button onClick={exportData} variant="outline" size="sm" className="w-full sm:w-auto">
-            <Download className="h-4 w-4 mr-2" />
-            Export Data
-          </Button>
-          <div className="text-sm text-muted-foreground text-center sm:text-left">
-            Total Responses: <span className="font-semibold">{totalResponses}</span>
+    <div className="min-h-screen bg-gray-50">
+      {/* Mobile-First Header */}
+      <div className="bg-white border-b sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
+            <div className="text-center md:text-left">
+              <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-gray-900">
+                Survey Analytics
+              </h1>
+              <p className="text-xs md:text-sm text-gray-600 mt-1">
+                Virtual Try-On Market Research
+              </p>
+            </div>
+            
+            <div className="flex flex-col space-y-2 md:flex-row md:items-center md:space-y-0 md:space-x-4">
+              <Button 
+                onClick={exportData} 
+                variant="outline" 
+                size="sm" 
+                className="w-full md:w-auto text-xs md:text-sm"
+              >
+                <Download className="h-3 w-3 md:h-4 md:w-4 mr-2" />
+                Export Data
+              </Button>
+              <div className="text-xs md:text-sm text-gray-600 text-center md:text-left bg-gray-100 px-3 py-1 rounded-full">
+                <span className="font-medium">{totalResponses}</span> Responses
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <Tabs defaultValue="overview" className="space-y-4 sm:space-y-6">
-        <TabsList className="grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 bg-white border h-auto">
-          <TabsTrigger value="overview" className="text-xs sm:text-sm">Overview</TabsTrigger>
-          <TabsTrigger value="demographics" className="text-xs sm:text-sm">Demographics</TabsTrigger>
-          <TabsTrigger value="pain-points" className="text-xs sm:text-sm">Pain Points</TabsTrigger>
-          <TabsTrigger value="features" className="text-xs sm:text-sm">Features</TabsTrigger>
-          <TabsTrigger value="individual" className="text-xs sm:text-sm">Individual</TabsTrigger>
-        </TabsList>
+      {/* Main Content */}
+      <div className="container mx-auto px-4 py-4 md:py-6">
+        <Tabs defaultValue="overview" className="space-y-4">
+          {/* Mobile-Optimized Tabs */}
+          <div className="overflow-x-auto">
+            <TabsList className="inline-flex w-max min-w-full bg-white border rounded-lg p-1">
+              <TabsTrigger 
+                value="overview" 
+                className="flex-1 min-w-[80px] text-xs md:text-sm px-3 py-2 whitespace-nowrap"
+              >
+                Overview
+              </TabsTrigger>
+              <TabsTrigger 
+                value="demographics" 
+                className="flex-1 min-w-[80px] text-xs md:text-sm px-3 py-2 whitespace-nowrap"
+              >
+                Demographics
+              </TabsTrigger>
+              <TabsTrigger 
+                value="pain-points" 
+                className="flex-1 min-w-[80px] text-xs md:text-sm px-3 py-2 whitespace-nowrap"
+              >
+                Pain Points
+              </TabsTrigger>
+              <TabsTrigger 
+                value="features" 
+                className="flex-1 min-w-[80px] text-xs md:text-sm px-3 py-2 whitespace-nowrap"
+              >
+                Features
+              </TabsTrigger>
+              <TabsTrigger 
+                value="individual" 
+                className="flex-1 min-w-[80px] text-xs md:text-sm px-3 py-2 whitespace-nowrap"
+              >
+                Individual
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-        <TabsContent value="overview" className="space-y-4 sm:space-y-6">
-          {/* Key Metrics Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-xs sm:text-sm font-medium">Upload Willingness</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
+          <TabsContent value="overview" className="space-y-6">
+          {/* Key Metrics Cards - Mobile First Design */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-semibold text-blue-900">Upload Willingness</CardTitle>
+                  <div className="p-2 bg-blue-200 rounded-full">
+                    <Users className="h-4 w-4 text-blue-700" />
+                  </div>
+                </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-lg sm:text-2xl font-bold">{uploadPercentage.toFixed(1)}%</div>
-                <Progress value={uploadPercentage} className="mt-2" />
-                <p className="text-xs text-muted-foreground mt-1">
-                  {willingToUpload} out of {totalResponses} users
-                </p>
+              <CardContent className="pt-0">
+                <div className="space-y-3">
+                  <div className="text-3xl font-bold text-blue-900">{uploadPercentage.toFixed(1)}%</div>
+                  <Progress value={uploadPercentage} className="h-2 bg-blue-200" />
+                  <p className="text-xs text-blue-700 font-medium">
+                    {willingToUpload} out of {totalResponses} users willing to upload photos
+                  </p>
+                </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-xs sm:text-sm font-medium">Social Media Shoppers</CardTitle>
-                <ShoppingBag className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-lg sm:text-2xl font-bold">
-                  {totalResponses > 0 ? ((socialMediaShoppers / totalResponses) * 100).toFixed(1) : 0}%
+            <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-semibold text-green-900">Social Media Shoppers</CardTitle>
+                  <div className="p-2 bg-green-200 rounded-full">
+                    <ShoppingBag className="h-4 w-4 text-green-700" />
+                  </div>
                 </div>
-                <Progress value={totalResponses > 0 ? (socialMediaShoppers / totalResponses) * 100 : 0} className="mt-2" />
-                <p className="text-xs text-muted-foreground mt-1">
-                  {socialMediaShoppers} users shop via social media
-                </p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="space-y-3">
+                  <div className="text-3xl font-bold text-green-900">
+                    {totalResponses > 0 ? ((socialMediaShoppers / totalResponses) * 100).toFixed(1) : 0}%
+                  </div>
+                  <Progress 
+                    value={totalResponses > 0 ? (socialMediaShoppers / totalResponses) * 100 : 0} 
+                    className="h-2 bg-green-200" 
+                  />
+                  <p className="text-xs text-green-700 font-medium">
+                    {socialMediaShoppers} users shop via social media
+                  </p>
+                </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-xs sm:text-sm font-medium">Purchase Confidence</CardTitle>
-                <Star className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-lg sm:text-2xl font-bold">
-                  {totalResponses > 0 ? ((highConfidenceAfterTryOn / totalResponses) * 100).toFixed(1) : 0}%
+            <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-semibold text-purple-900">Purchase Confidence</CardTitle>
+                  <div className="p-2 bg-purple-200 rounded-full">
+                    <Star className="h-4 w-4 text-purple-700" />
+                  </div>
                 </div>
-                <Progress value={totalResponses > 0 ? (highConfidenceAfterTryOn / totalResponses) * 100 : 0} className="mt-2" />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Would buy after virtual try-on
-                </p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="space-y-3">
+                  <div className="text-3xl font-bold text-purple-900">
+                    {totalResponses > 0 ? ((highConfidenceAfterTryOn / totalResponses) * 100).toFixed(1) : 0}%
+                  </div>
+                  <Progress 
+                    value={totalResponses > 0 ? (highConfidenceAfterTryOn / totalResponses) * 100 : 0} 
+                    className="h-2 bg-purple-200" 
+                  />
+                  <p className="text-xs text-purple-700 font-medium">
+                    Would buy after virtual try-on
+                  </p>
+                </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-xs sm:text-sm font-medium">App Adoption</CardTitle>
-                <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-lg sm:text-2xl font-bold">
-                  {totalResponses > 0 ? ((likelyToUseApp / totalResponses) * 100).toFixed(1) : 0}%
+            <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-semibold text-orange-900">App Adoption</CardTitle>
+                  <div className="p-2 bg-orange-200 rounded-full">
+                    <AlertTriangle className="h-4 w-4 text-orange-700" />
+                  </div>
                 </div>
-                <Progress value={totalResponses > 0 ? (likelyToUseApp / totalResponses) * 100 : 0} className="mt-2" />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Likely to use the app
-                </p>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="space-y-3">
+                  <div className="text-3xl font-bold text-orange-900">
+                    {totalResponses > 0 ? ((likelyToUseApp / totalResponses) * 100).toFixed(1) : 0}%
+                  </div>
+                  <Progress 
+                    value={totalResponses > 0 ? (likelyToUseApp / totalResponses) * 100 : 0} 
+                    className="h-2 bg-orange-200" 
+                  />
+                  <p className="text-xs text-orange-700 font-medium">
+                    Likely to use the app
+                  </p>
+                </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Key Insights */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Alert>
-              <AlertTriangle className="h-4 w-4" />
-              <AlertDescription>
+          <div className="grid grid-cols-1 gap-4">
+            <Alert className="bg-blue-50 border-blue-200">
+              <AlertTriangle className="h-4 w-4 text-blue-600" />
+              <AlertDescription className="text-blue-800">
                 <strong>High Market Interest:</strong> {uploadPercentage.toFixed(1)}% of users are willing to upload images, indicating strong market acceptance for virtual try-on technology.
               </AlertDescription>
             </Alert>
             
-            <Alert>
-              <Star className="h-4 w-4" />
-              <AlertDescription>
+            <Alert className="bg-green-50 border-green-200">
+              <Star className="h-4 w-4 text-green-600" />
+              <AlertDescription className="text-green-800">
                 <strong>Business Impact:</strong> {((highConfidenceAfterTryOn / totalResponses) * 100).toFixed(1)}% would be more confident purchasing after virtual try-on, showing clear ROI potential.
               </AlertDescription>
             </Alert>
           </div>
 
-          {/* Quick Charts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base sm:text-lg">Age Distribution</CardTitle>
+          {/* Charts Section - Mobile Optimized */}
+          <div className="space-y-6">
+            <Card className="overflow-hidden">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg font-semibold text-gray-900">Age Distribution</CardTitle>
+                <p className="text-sm text-gray-600">Survey respondents by age group</p>
               </CardHeader>
-              <CardContent>
-                <ChartContainer config={{}} className="h-[200px] sm:h-[250px]">
+              <CardContent className="p-0">
+                <ChartContainer config={{}} className="h-[250px] md:h-[300px] w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={ageChartData}>
-                      <XAxis dataKey="age" className="text-xs" />
-                      <YAxis className="text-xs" />
+                    <BarChart data={ageChartData} margin={{ top: 20, right: 20, left: 20, bottom: 20 }}>
+                      <XAxis 
+                        dataKey="age" 
+                        className="text-xs" 
+                        tick={{ fontSize: 12 }}
+                        axisLine={false}
+                        tickLine={false}
+                      />
+                      <YAxis 
+                        className="text-xs" 
+                        tick={{ fontSize: 12 }}
+                        axisLine={false}
+                        tickLine={false}
+                      />
                       <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="count" fill="#0088FE" />
+                      <Bar 
+                        dataKey="count" 
+                        fill="#3B82F6" 
+                        radius={[4, 4, 0, 0]}
+                        maxBarSize={60}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </ChartContainer>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base sm:text-lg">Gender Distribution</CardTitle>
+            <Card className="overflow-hidden">
+              <CardHeader className="pb-4">
+                <CardTitle className="text-lg font-semibold text-gray-900">Gender Distribution</CardTitle>
+                <p className="text-sm text-gray-600">Survey respondents by gender</p>
               </CardHeader>
-              <CardContent>
-                <ChartContainer config={{}} className="h-[200px] sm:h-[250px]">
+              <CardContent className="flex justify-center p-4">
+                <ChartContainer config={{}} className="h-[250px] md:h-[300px] w-full max-w-md">
                   <ResponsiveContainer width="100%" height="100%">
                     <PieChart>
                       <Pie
                         data={genderChartData}
                         cx="50%"
                         cy="50%"
-                        outerRadius={60}
+                        outerRadius="80%"
                         fill="#8884d8"
                         dataKey="count"
                         label={({ gender, percentage }) => `${gender}: ${percentage}%`}
+                        labelLine={false}
+                        fontSize={12}
                       >
                         {genderChartData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -717,92 +814,177 @@ export default function AdminDashboard() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="individual" className="space-y-4 sm:space-y-6">
+        <TabsContent value="individual" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base sm:text-lg">Individual Survey Responses</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">
+              <CardTitle className="text-lg font-semibold">Individual Survey Responses</CardTitle>
+              <CardDescription>
                 Detailed view of each survey response - {totalResponses} total responses
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="rounded-md border overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[60px] text-xs">ID</TableHead>
-                      <TableHead className="text-xs">Age</TableHead>
-                      <TableHead className="text-xs">Gender</TableHead>
-                      <TableHead className="text-xs hidden sm:table-cell">Shopping Pref</TableHead>
-                      <TableHead className="text-xs">Upload</TableHead>
-                      <TableHead className="text-xs hidden md:table-cell">Return Freq</TableHead>
-                      <TableHead className="text-xs">Confidence</TableHead>
-                      <TableHead className="text-xs hidden lg:table-cell">App Likelihood</TableHead>
-                      <TableHead className="text-xs hidden sm:table-cell">Completed</TableHead>
-                      <TableHead className="w-[50px] text-xs">Details</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {responses.map((response, index) => (
-                      <TableRow key={response._id}>
-                        <TableCell className="font-medium text-xs">#{index + 1}</TableCell>
-                        <TableCell className="text-xs">{response.age}</TableCell>
-                        <TableCell className="capitalize text-xs">{response.gender}</TableCell>
-                        <TableCell className="text-xs hidden sm:table-cell">
-                          <Badge variant="outline" className="text-xs">
-                            {response.shoppingPreference?.replace('-', ' ')}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-xs">
-                          <Badge variant={response.imageUploadWillingness === 'Yes' ? 'default' : 'secondary'} className="text-xs">
-                            {response.imageUploadWillingness}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-xs hidden md:table-cell">{response.returnsProblem}</TableCell>
-                        <TableCell className="text-xs">
-                          <Badge variant={
-                            response.clothesFit === 'Very well' ? 'default' :
-                            response.clothesFit === 'Somewhat well' ? 'secondary' : 'destructive'
-                          } className="text-xs">
-                            {response.clothesFit}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-xs hidden lg:table-cell">
-                          <Badge variant={
-                            response.purchaseConfidence === '5' || response.purchaseConfidence === '4' ? 'default' :
-                            response.purchaseConfidence === '3' ? 'secondary' : 'destructive'
-                          } className="text-xs">
-                            {response.purchaseConfidence}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-xs text-muted-foreground hidden sm:table-cell">
-                          {response.completedAt ? new Date(response.completedAt).toLocaleDateString() : 'N/A'}
-                        </TableCell>
-                        <TableCell>
+            <CardContent className="p-0">
+              {/* Mobile-First Card Layout */}
+              <div className="space-y-4 p-4 md:p-6">
+                {responses.map((response, index) => (
+                  <Card key={response._id} className="border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
+                    <CardContent className="p-4">
+                      <div className="flex flex-col space-y-3">
+                        {/* Header Row */}
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <span className="text-lg font-bold text-blue-600">#{index + 1}</span>
+                            <div className="text-sm text-gray-600">
+                              {response.age} • {response.gender}
+                            </div>
+                          </div>
                           <Button
-                            variant="ghost"
+                            variant="outline"
                             size="sm"
-                            onClick={() => {
-                              setSelectedResponse(response);
-                              setIsModalOpen(true);
-                            }}
-                            className="h-6 w-6 p-0"
+                            onClick={() => setSelectedResponse(response)}
+                            className="text-xs px-3 py-1"
                           >
-                            <Info className="h-3 w-3" />
+                            <Eye className="h-3 w-3 mr-1" />
+                            Details
                           </Button>
-                        </TableCell>
+                        </div>
+
+                        {/* Key Metrics Grid */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                          <div className="bg-gray-50 rounded-lg p-3">
+                            <div className="text-xs text-gray-500 mb-1">Upload Willingness</div>
+                            <Badge 
+                              variant={response.imageUploadWillingness === 'yes-upload' ? 'default' : 'secondary'} 
+                              className="text-xs"
+                            >
+                              {response.imageUploadWillingness === 'yes-upload' ? 'Yes' : 'No'}
+                            </Badge>
+                          </div>
+
+                          <div className="bg-gray-50 rounded-lg p-3">
+                            <div className="text-xs text-gray-500 mb-1">Shopping Preference</div>
+                            <div className="text-xs font-medium capitalize">
+                              {response.shoppingPreference?.replace('-', ' ') || 'N/A'}
+                            </div>
+                          </div>
+
+                          <div className="bg-gray-50 rounded-lg p-3">
+                            <div className="text-xs text-gray-500 mb-1">Clothes Fit</div>
+                            <Badge 
+                              variant={
+                                response.clothesFit === 'Very well' ? 'default' :
+                                response.clothesFit === 'Somewhat well' ? 'secondary' : 'destructive'
+                              } 
+                              className="text-xs"
+                            >
+                              {response.clothesFit || 'N/A'}
+                            </Badge>
+                          </div>
+
+                          <div className="bg-gray-50 rounded-lg p-3">
+                            <div className="text-xs text-gray-500 mb-1">Purchase Confidence</div>
+                            <Badge 
+                              variant={
+                                response.purchaseConfidence === 'very-confident' || response.purchaseConfidence === 'confident' ? 'default' :
+                                response.purchaseConfidence === 'neutral' ? 'secondary' : 'destructive'
+                              } 
+                              className="text-xs"
+                            >
+                              {response.purchaseConfidence || 'N/A'}
+                            </Badge>
+                          </div>
+                        </div>
+
+                        {/* Additional Info */}
+                        <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 pt-2 border-t">
+                          <div>Returns: {response.returnsProblem || 'N/A'}</div>
+                          <div>
+                            Completed: {response.completedAt ? new Date(response.completedAt).toLocaleDateString() : 'N/A'}
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Fallback Table for Desktop (Hidden on Mobile) */}
+              <div className="hidden xl:block">
+                <div className="rounded-md border overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-[60px] text-xs">ID</TableHead>
+                        <TableHead className="text-xs">Age</TableHead>
+                        <TableHead className="text-xs">Gender</TableHead>
+                        <TableHead className="text-xs">Shopping Pref</TableHead>
+                        <TableHead className="text-xs">Upload</TableHead>
+                        <TableHead className="text-xs">Return Freq</TableHead>
+                        <TableHead className="text-xs">Confidence</TableHead>
+                        <TableHead className="text-xs">App Likelihood</TableHead>
+                        <TableHead className="text-xs">Completed</TableHead>
+                        <TableHead className="w-[50px] text-xs">Details</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {responses.map((response, index) => (
+                        <TableRow key={response._id}>
+                          <TableCell className="font-medium text-xs">#{index + 1}</TableCell>
+                          <TableCell className="text-xs">{response.age}</TableCell>
+                          <TableCell className="capitalize text-xs">{response.gender}</TableCell>
+                          <TableCell className="text-xs">
+                            <Badge variant="outline" className="text-xs">
+                              {response.shoppingPreference?.replace('-', ' ')}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-xs">
+                            <Badge variant={response.imageUploadWillingness === 'yes-upload' ? 'default' : 'secondary'} className="text-xs">
+                              {response.imageUploadWillingness === 'yes-upload' ? 'Yes' : 'No'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-xs">{response.returnsProblem}</TableCell>
+                          <TableCell className="text-xs">
+                            <Badge variant={
+                              response.clothesFit === 'Very well' ? 'default' :
+                              response.clothesFit === 'Somewhat well' ? 'secondary' : 'destructive'
+                            } className="text-xs">
+                              {response.clothesFit}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-xs">
+                            <Badge variant={
+                              response.purchaseConfidence === 'very-confident' || response.purchaseConfidence === 'confident' ? 'default' :
+                              response.purchaseConfidence === 'neutral' ? 'secondary' : 'destructive'
+                            } className="text-xs">
+                              {response.purchaseConfidence}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-xs text-muted-foreground">
+                            {response.completedAt ? new Date(response.completedAt).toLocaleDateString() : 'N/A'}
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setSelectedResponse(response)}
+                              className="h-6 w-6 p-0"
+                            >
+                              <Eye className="h-3 w-3" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
-      </Tabs>
+        </Tabs>
+      </div>
 
       {/* User Details Modal */}
-      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+      <Dialog open={!!selectedResponse} onOpenChange={(open) => !open && setSelectedResponse(null)}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto mx-3 sm:mx-auto">
           <DialogHeader>
             <DialogTitle className="text-base sm:text-lg">Complete Survey Response</DialogTitle>
