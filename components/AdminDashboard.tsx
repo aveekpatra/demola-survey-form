@@ -822,160 +822,73 @@ export default function AdminDashboard() {
                 Detailed view of each survey response - {totalResponses} total responses
               </CardDescription>
             </CardHeader>
-            <CardContent className="p-0">
-              {/* Mobile-First Card Layout */}
-              <div className="space-y-4 p-4 md:p-6">
-                {responses.map((response, index) => (
-                  <Card key={response._id} className="border-l-4 border-l-blue-500 hover:shadow-md transition-shadow">
-                    <CardContent className="p-4">
-                      <div className="flex flex-col space-y-3">
-                        {/* Header Row */}
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <span className="text-lg font-bold text-blue-600">#{index + 1}</span>
-                            <div className="text-sm text-gray-600">
-                              {response.age} • {response.gender}
-                            </div>
-                          </div>
+            <CardContent>
+              <div className="rounded-md border overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[60px] text-xs">ID</TableHead>
+                      <TableHead className="text-xs">Age</TableHead>
+                      <TableHead className="text-xs">Gender</TableHead>
+                      <TableHead className="text-xs">Shopping Pref</TableHead>
+                      <TableHead className="text-xs">Upload</TableHead>
+                      <TableHead className="text-xs">Return Freq</TableHead>
+                      <TableHead className="text-xs">Confidence</TableHead>
+                      <TableHead className="text-xs">App Likelihood</TableHead>
+                      <TableHead className="text-xs">Completed</TableHead>
+                      <TableHead className="w-[50px] text-xs">Details</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {responses.map((response, index) => (
+                      <TableRow key={response._id}>
+                        <TableCell className="font-medium text-xs">#{index + 1}</TableCell>
+                        <TableCell className="text-xs">{response.age}</TableCell>
+                        <TableCell className="capitalize text-xs">{response.gender}</TableCell>
+                        <TableCell className="text-xs">
+                          <Badge variant="outline" className="text-xs">
+                            {response.shoppingPreference?.replace('-', ' ')}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-xs">
+                          <Badge variant={response.imageUploadWillingness === 'yes-upload' ? 'default' : 'secondary'} className="text-xs">
+                            {response.imageUploadWillingness === 'yes-upload' ? 'Yes' : 'No'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-xs">{response.returnsProblem}</TableCell>
+                        <TableCell className="text-xs">
+                          <Badge variant={
+                            response.clothesFit === 'Very well' ? 'default' :
+                            response.clothesFit === 'Somewhat well' ? 'secondary' : 'destructive'
+                          } className="text-xs">
+                            {response.clothesFit}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-xs">
+                          <Badge variant={
+                            response.purchaseConfidence === 'very-confident' || response.purchaseConfidence === 'confident' ? 'default' :
+                            response.purchaseConfidence === 'neutral' ? 'secondary' : 'destructive'
+                          } className="text-xs">
+                            {response.purchaseConfidence}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground">
+                          {response.completedAt ? new Date(response.completedAt).toLocaleDateString() : 'N/A'}
+                        </TableCell>
+                        <TableCell>
                           <Button
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
                             onClick={() => setSelectedResponse(response)}
-                            className="text-xs px-3 py-1"
+                            className="h-6 w-6 p-0"
                           >
-                            <Eye className="h-3 w-3 mr-1" />
-                            Details
+                            <Eye className="h-3 w-3" />
                           </Button>
-                        </div>
-
-                        {/* Key Metrics Grid */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                          <div className="bg-gray-50 rounded-lg p-3">
-                            <div className="text-xs text-gray-500 mb-1">Upload Willingness</div>
-                            <Badge 
-                              variant={response.imageUploadWillingness === 'yes-upload' ? 'default' : 'secondary'} 
-                              className="text-xs"
-                            >
-                              {response.imageUploadWillingness === 'yes-upload' ? 'Yes' : 'No'}
-                            </Badge>
-                          </div>
-
-                          <div className="bg-gray-50 rounded-lg p-3">
-                            <div className="text-xs text-gray-500 mb-1">Shopping Preference</div>
-                            <div className="text-xs font-medium capitalize">
-                              {response.shoppingPreference?.replace('-', ' ') || 'N/A'}
-                            </div>
-                          </div>
-
-                          <div className="bg-gray-50 rounded-lg p-3">
-                            <div className="text-xs text-gray-500 mb-1">Clothes Fit</div>
-                            <Badge 
-                              variant={
-                                response.clothesFit === 'Very well' ? 'default' :
-                                response.clothesFit === 'Somewhat well' ? 'secondary' : 'destructive'
-                              } 
-                              className="text-xs"
-                            >
-                              {response.clothesFit || 'N/A'}
-                            </Badge>
-                          </div>
-
-                          <div className="bg-gray-50 rounded-lg p-3">
-                            <div className="text-xs text-gray-500 mb-1">Purchase Confidence</div>
-                            <Badge 
-                              variant={
-                                response.purchaseConfidence === 'very-confident' || response.purchaseConfidence === 'confident' ? 'default' :
-                                response.purchaseConfidence === 'neutral' ? 'secondary' : 'destructive'
-                              } 
-                              className="text-xs"
-                            >
-                              {response.purchaseConfidence || 'N/A'}
-                            </Badge>
-                          </div>
-                        </div>
-
-                        {/* Additional Info */}
-                        <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 pt-2 border-t">
-                          <div>Returns: {response.returnsProblem || 'N/A'}</div>
-                          <div>
-                            Completed: {response.completedAt ? new Date(response.completedAt).toLocaleDateString() : 'N/A'}
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              {/* Fallback Table for Desktop (Hidden on Mobile) */}
-              <div className="hidden xl:block">
-                <div className="rounded-md border overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-[60px] text-xs">ID</TableHead>
-                        <TableHead className="text-xs">Age</TableHead>
-                        <TableHead className="text-xs">Gender</TableHead>
-                        <TableHead className="text-xs">Shopping Pref</TableHead>
-                        <TableHead className="text-xs">Upload</TableHead>
-                        <TableHead className="text-xs">Return Freq</TableHead>
-                        <TableHead className="text-xs">Confidence</TableHead>
-                        <TableHead className="text-xs">App Likelihood</TableHead>
-                        <TableHead className="text-xs">Completed</TableHead>
-                        <TableHead className="w-[50px] text-xs">Details</TableHead>
+                        </TableCell>
                       </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {responses.map((response, index) => (
-                        <TableRow key={response._id}>
-                          <TableCell className="font-medium text-xs">#{index + 1}</TableCell>
-                          <TableCell className="text-xs">{response.age}</TableCell>
-                          <TableCell className="capitalize text-xs">{response.gender}</TableCell>
-                          <TableCell className="text-xs">
-                            <Badge variant="outline" className="text-xs">
-                              {response.shoppingPreference?.replace('-', ' ')}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-xs">
-                            <Badge variant={response.imageUploadWillingness === 'yes-upload' ? 'default' : 'secondary'} className="text-xs">
-                              {response.imageUploadWillingness === 'yes-upload' ? 'Yes' : 'No'}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-xs">{response.returnsProblem}</TableCell>
-                          <TableCell className="text-xs">
-                            <Badge variant={
-                              response.clothesFit === 'Very well' ? 'default' :
-                              response.clothesFit === 'Somewhat well' ? 'secondary' : 'destructive'
-                            } className="text-xs">
-                              {response.clothesFit}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-xs">
-                            <Badge variant={
-                              response.purchaseConfidence === 'very-confident' || response.purchaseConfidence === 'confident' ? 'default' :
-                              response.purchaseConfidence === 'neutral' ? 'secondary' : 'destructive'
-                            } className="text-xs">
-                              {response.purchaseConfidence}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-xs text-muted-foreground">
-                            {response.completedAt ? new Date(response.completedAt).toLocaleDateString() : 'N/A'}
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => setSelectedResponse(response)}
-                              className="h-6 w-6 p-0"
-                            >
-                              <Eye className="h-3 w-3" />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
             </CardContent>
           </Card>
