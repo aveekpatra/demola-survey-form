@@ -30,10 +30,6 @@ const getStringValue = (val: string | string[] | undefined): string => {
   return "";
 };
 
-const isCheckboxQuestion = (question: Question | undefined): boolean => {
-  return question?.type === "checkbox";
-};
-
 export default function TypeFormSurvey() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});

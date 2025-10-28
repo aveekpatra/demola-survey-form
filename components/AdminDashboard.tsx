@@ -10,14 +10,43 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line } from "recharts";
-import { Loader2, Users, ShoppingBag, AlertTriangle, Star, Download, Filter, Info } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { Loader2, Users, ShoppingBag, AlertTriangle, Star, Download, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+
+interface SurveyResponse {
+  _id: string;
+  _creationTime: number;
+  age?: string;
+  gender?: string;
+  shoppingPreference?: string;
+  onlineShoppingFrequency?: string;
+  findClothes?: string;
+  socialMediaShopping?: string;
+  socialMediaPlatforms?: string[];
+  clothesFit?: string;
+  returnsProblem?: string;
+  misSizedItems?: string;
+  trustIssues?: string[];
+  colorMatchingUncertainty?: string;
+  imageUploadWillingness?: string;
+  tryOnFromSocialMedia?: string;
+  tryOnUseFrequency?: string;
+  tryOnBodyType?: string;
+  tryOnConcerns?: string[];
+  speedExpectation?: string;
+  skinToneAccuracy?: string;
+  virtualTryOn?: string;
+  arRealism?: string;
+  purchaseConfidence?: string;
+  completedAt: number;
+  userAgent?: string;
+}
 
 export default function AdminDashboard() {
   const responses = useQuery(api.myFunctions.getAllResponses);
-  const [selectedResponse, setSelectedResponse] = useState<any>(null);
+  const [selectedResponse, setSelectedResponse] = useState<SurveyResponse | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!responses) {
@@ -826,7 +855,7 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Most Mis-sized Items</label>
-                    <p className="text-sm">{selectedResponse.mostMisSizedItems || 'Not provided'}</p>
+                    <p className="text-sm">{selectedResponse.misSizedItems || 'Not provided'}</p>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Purchase Confidence</label>
@@ -843,7 +872,7 @@ export default function AdminDashboard() {
                 <CardContent className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Body Shape Accuracy Importance</label>
-                    <p className="text-sm">{selectedResponse.bodyShapeAccuracy || 'Not provided'}</p>
+                    <p className="text-sm">{selectedResponse.tryOnBodyType || 'Not provided'}</p>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Skin Tone Accuracy Importance</label>
@@ -851,11 +880,11 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Acceptable Wait Time</label>
-                    <p className="text-sm">{selectedResponse.acceptableWaitTime || 'Not provided'}</p>
+                    <p className="text-sm">{selectedResponse.speedExpectation || 'Not provided'}</p>
                   </div>
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Expected Usage Frequency</label>
-                    <p className="text-sm">{selectedResponse.expectedUsageFrequency || 'Not provided'}</p>
+                    <p className="text-sm">{selectedResponse.tryOnUseFrequency || 'Not provided'}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -911,7 +940,7 @@ export default function AdminDashboard() {
                   </div>
                   <div>
                     <label className="text-sm font-medium text-muted-foreground">Confidence After Try-On</label>
-                    <p className="text-sm">{selectedResponse.confidenceAfterTryOn || 'Not provided'}</p>
+                    <p className="text-sm">{selectedResponse.purchaseConfidence || 'Not provided'}</p>
                   </div>
                 </CardContent>
               </Card>
