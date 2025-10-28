@@ -44,8 +44,8 @@ export default function TypeFormSurvey() {
 
   // Check if current question has been answered
   const hasAnswer = currentQuestion
-    ? answers[currentQuestion.id] !== undefined && answers[currentQuestion.id] !== "" && 
-      (Array.isArray(answers[currentQuestion.id]) ? (answers[currentQuestion.id] as string[]).length > 0 : true)
+    ? answers[currentQuestion.id] !== undefined && answers[currentQuestion.id] !== "" &&
+    (Array.isArray(answers[currentQuestion.id]) ? (answers[currentQuestion.id] as string[]).length > 0 : true)
     : false;
 
   // Auto-forward after answer selection
@@ -131,7 +131,7 @@ export default function TypeFormSurvey() {
   if (isCompleted) {
     return (
       <motion.div
-        className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center py-4 sm:py-8 lg:py-12 px-3 sm:px-4"
+        className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center py-12 px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
@@ -142,9 +142,9 @@ export default function TypeFormSurvey() {
           transition={{ type: "spring", damping: 15, stiffness: 100 }}
         >
           <Card className="w-full max-w-2xl border-slate-200 dark:border-slate-800">
-            <CardContent className="pt-8 sm:pt-12 pb-8 sm:pb-12 text-center space-y-4 sm:space-y-6">
+            <CardContent className="pt-12 pb-12 text-center space-y-6">
               <motion.div
-                className="text-4xl sm:text-5xl lg:text-6xl"
+                className="text-6xl"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, type: "spring", damping: 12, stiffness: 100 }}
@@ -156,15 +156,15 @@ export default function TypeFormSurvey() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#4169E1] dark:text-[#6495ED] mb-2">
+                <h1 className="text-4xl font-bold text-[#4169E1] dark:text-[#6495ED] mb-2">
                   Thank You!
                 </h1>
-                <p className="text-base sm:text-lg text-slate-600 dark:text-slate-400 px-2">
+                <p className="text-lg text-slate-600 dark:text-slate-400">
                   Your survey response has been saved successfully.
                 </p>
               </motion.div>
               <motion.p
-                className="text-xs sm:text-sm text-slate-500 dark:text-slate-500 px-2"
+                className="text-sm text-slate-500 dark:text-slate-500"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
@@ -182,7 +182,7 @@ export default function TypeFormSurvey() {
                     setAnswers({});
                     setIsCompleted(false);
                   }}
-                  className="bg-[#4169E1] hover:bg-[#315AC1] text-white font-semibold h-11 sm:h-auto text-sm sm:text-base w-full sm:w-auto"
+                  className="bg-[#4169E1] hover:bg-[#315AC1] text-white font-semibold"
                 >
                   Take Survey Again
                 </Button>
@@ -199,7 +199,7 @@ export default function TypeFormSurvey() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center py-4 sm:py-8 lg:py-12 px-3 sm:px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center py-12 px-4">
       <motion.div
         className="w-full max-w-2xl"
         initial={{ opacity: 0 }}
@@ -208,16 +208,16 @@ export default function TypeFormSurvey() {
       >
         {/* Progress Bar */}
         <motion.div
-          className="mb-4 sm:mb-6 lg:mb-8"
+          className="mb-8"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <div className="flex justify-between items-center mb-2 sm:mb-3">
-            <span className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
               Question {currentIndex + 1} of {totalQuestions}
             </span>
-            <span className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">
+            <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
               {Math.round(progress)}%
             </span>
           </div>
@@ -234,124 +234,102 @@ export default function TypeFormSurvey() {
             transition={{ type: "spring", damping: 20, stiffness: 120, duration: 0.4 }}
           >
             <Card className="border-slate-200 dark:border-slate-800">
-              <CardHeader className="pb-4 sm:pb-6">
+              <CardHeader>
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1, duration: 0.3 }}
                 >
-                  <CardTitle className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#4169E1] dark:text-[#6495ED] mb-2 leading-tight">
+                  <CardTitle className="text-3xl font-bold text-[#4169E1] dark:text-[#6495ED] mb-2">
                     {currentQuestion.question}
                   </CardTitle>
                   {currentQuestion.description && (
-                    <CardDescription className="text-sm sm:text-base">
+                    <CardDescription className="text-base">
                       {currentQuestion.description}
                     </CardDescription>
                   )}
                 </motion.div>
               </CardHeader>
 
-              <CardContent className="space-y-4 sm:space-y-6">
+              <CardContent className="space-y-6">
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.15, duration: 0.3 }}
                 >
-                {currentQuestion.type === "radio" && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2, duration: 0.3 }}
-                  >
+                  {currentQuestion.type === "radio" && (
                     <RadioGroup
                       value={getStringValue(answers[currentQuestion.id])}
                       onValueChange={handleAnswer}
-                      className="space-y-3 sm:space-y-4"
                     >
-                      {currentQuestion.options.map((option) => (
-                        <motion.div
-                          key={option.id}
-                          className="flex items-center space-x-3 p-3 sm:p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={() => handleAnswer(option.value)}
-                        >
-                          <RadioGroupItem value={option.value} id={option.id} />
-                          <Label
-                            htmlFor={option.id}
-                            className="flex-1 text-sm sm:text-base cursor-pointer leading-relaxed"
+                      <div className="space-y-4">
+                        {currentQuestion.options.map((option) => (
+                          <div
+                            key={option.id}
+                            className="flex items-center space-x-3 p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-[#4169E1] dark:hover:border-[#6495ED] hover:bg-slate-50 dark:hover:bg-slate-900 cursor-pointer transition-all"
                           >
-                            {option.label}
-                          </Label>
-                        </motion.div>
-                      ))}
+                            <RadioGroupItem value={option.value} id={option.id} />
+                            <Label
+                              htmlFor={option.id}
+                              className="font-normal cursor-pointer text-base flex-1"
+                            >
+                              {option.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
                     </RadioGroup>
-                  </motion.div>
-                )}
+                  )}
 
-                {currentQuestion.type === "checkbox" && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2, duration: 0.3 }}
-                  >
-                    <div className="space-y-3 sm:space-y-4">
+                  {currentQuestion.type === "checkbox" && (
+                    <div className="space-y-4" role="group" aria-labelledby={`question-${currentQuestion.id}`}>
                       {currentQuestion.options.map((option) => (
-                        <motion.div
+                        <label
                           key={option.id}
-                          className="flex items-center space-x-3 p-3 sm:p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={() => {
-                            const currentAnswers = Array.isArray(answers[currentQuestion.id])
-                              ? answers[currentQuestion.id] as string[]
-                              : [];
-                            const isChecked = currentAnswers.includes(option.value);
-                            handleCheckboxChange(option.id, !isChecked);
-                          }}
+                          htmlFor={`${currentQuestion.id}-${option.id}`}
+                          className="flex items-center space-x-3 p-4 rounded-lg border border-slate-200 dark:border-slate-700 hover:border-[#4169E1] dark:hover:border-[#6495ED] hover:bg-slate-50 dark:hover:bg-slate-900 transition-all cursor-pointer"
                         >
                           <Checkbox
-                            id={option.id}
+                            id={`${currentQuestion.id}-${option.id}`}
                             checked={
-                              Array.isArray(answers[currentQuestion.id]) &&
-                              (answers[currentQuestion.id] as string[]).includes(option.value)
+                              (answers[currentQuestion.id] || []).includes(option.id) || false
                             }
+                            onCheckedChange={(checked) =>
+                              handleCheckboxChange(option.id, checked as boolean)
+                            }
+                            aria-describedby={currentQuestion.description ? `question-${currentQuestion.id}-desc` : undefined}
                           />
-                          <Label
-                            htmlFor={option.id}
-                            className="flex-1 text-sm sm:text-base cursor-pointer leading-relaxed"
-                          >
+                          <span className="font-normal text-base flex-1">
                             {option.label}
-                          </Label>
-                        </motion.div>
+                          </span>
+                        </label>
                       ))}
                     </div>
-                  </motion.div>
-                )}
+                  )}
 
-                {currentQuestion.type === "select" && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2, duration: 0.3 }}
-                  >
-                    <Select
-                      value={getStringValue(answers[currentQuestion.id])}
-                      onValueChange={handleAnswer}
+                  {currentQuestion.type === "select" && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.2, duration: 0.3 }}
                     >
-                      <SelectTrigger className="w-full text-sm sm:text-base h-11 sm:h-12">
-                        <SelectValue placeholder="Select an option..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {currentQuestion.options.map((option) => (
-                          <SelectItem key={option.id} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </motion.div>
-                )}
+                      <Select
+                        value={getStringValue(answers[currentQuestion.id])}
+                        onValueChange={handleAnswer}
+                      >
+                        <SelectTrigger className="w-full text-base h-12">
+                          <SelectValue placeholder="Select an option..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {currentQuestion.options.map((option) => (
+                            <SelectItem key={option.id} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </motion.div>
+                  )}
                 </motion.div>
               </CardContent>
             </Card>
@@ -360,7 +338,7 @@ export default function TypeFormSurvey() {
 
         {/* Navigation Buttons */}
         <motion.div
-          className="flex flex-col sm:flex-row justify-between gap-3 sm:gap-4 mt-6 sm:mt-8"
+          className="flex justify-between gap-4 mt-8"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.3 }}
@@ -370,7 +348,7 @@ export default function TypeFormSurvey() {
             variant="outline"
             onClick={handlePrevious}
             disabled={currentIndex === 0}
-            className="flex-1 h-11 sm:h-auto text-sm sm:text-base"
+            className="flex-1"
           >
             Back
           </Button>
@@ -380,7 +358,7 @@ export default function TypeFormSurvey() {
               type="button"
               onClick={handleSubmit}
               disabled={isSubmitting || !hasAnswer}
-              className="flex-1 bg-[#4169E1] hover:bg-[#315AC1] text-white font-semibold disabled:bg-slate-400 h-11 sm:h-auto text-sm sm:text-base"
+              className="flex-1 bg-[#4169E1] hover:bg-[#315AC1] text-white font-semibold disabled:bg-slate-400"
             >
               {isSubmitting ? "Submitting..." : "Submit Survey"}
             </Button>
@@ -389,7 +367,7 @@ export default function TypeFormSurvey() {
               type="button"
               onClick={() => setCurrentIndex(currentIndex + 1)}
               disabled={!hasAnswer}
-              className="flex-1 bg-[#4169E1] hover:bg-[#315AC1] text-white font-semibold disabled:bg-slate-400 h-11 sm:h-auto text-sm sm:text-base"
+              className="flex-1 bg-[#4169E1] hover:bg-[#315AC1] text-white font-semibold disabled:bg-slate-400"
             >
               Next
             </Button>
@@ -398,7 +376,7 @@ export default function TypeFormSurvey() {
 
         {/* Helper Text */}
         <motion.p
-          className="text-center text-xs sm:text-sm text-slate-500 dark:text-slate-500 mt-4 sm:mt-6 px-2"
+          className="text-center text-sm text-slate-500 dark:text-slate-500 mt-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.3 }}
