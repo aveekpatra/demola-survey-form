@@ -200,27 +200,7 @@ export function InsightsAdminDashboard() {
     };
   }, [responses]);
 
-  // Market Opportunity Analysis
-  const marketOpportunity = useMemo(() => {
-    if (!responses.length) return null;
 
-    const totalMarket = responses.length * 1000; // Assuming each response represents 1000 potential users
-    const servicableMarket = responses.filter(r => isPositive(r.socialMediaShopping) || isPositive(r.onlineShoppingFrequency)).length * 1000;
-    const obtainableMarket = responses.filter(r => isPositive(r.virtualTryOn) && isPositive(r.imageUploadWillingness)).length * 1000;
-    
-    const avgOrderValue = 75; // Estimated AOV
-    const conversionRate = 0.03; // 3% conversion rate
-    
-    const potentialRevenue = obtainableMarket * avgOrderValue * conversionRate;
-
-    return {
-      tam: totalMarket,
-      sam: servicableMarket,
-      som: obtainableMarket,
-      potentialRevenue: Math.round(potentialRevenue),
-      conversionOpportunity: percent(obtainableMarket, totalMarket)
-    };
-  }, [responses]);
 
   const onViewDetails = (response: SurveyResponse) => {
     setSelectedResponse(response);
@@ -270,7 +250,6 @@ export function InsightsAdminDashboard() {
             <TabsTrigger value="segmentation">User Segments</TabsTrigger>
             <TabsTrigger value="funnel">Conversion Funnel</TabsTrigger>
             <TabsTrigger value="painpoints">Pain Points</TabsTrigger>
-            <TabsTrigger value="market">Market Opportunity</TabsTrigger>
             <TabsTrigger value="responses">Individual Responses</TabsTrigger>
           </TabsList>
 
@@ -614,71 +593,7 @@ export function InsightsAdminDashboard() {
             )}
           </TabsContent>
 
-          {/* Market Opportunity Tab */}
-          <TabsContent value="market" className="space-y-6">
-            {marketOpportunity && (
-              <>
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-sm">Total Addressable Market</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">{marketOpportunity.tam.toLocaleString()}</div>
-                      <p className="text-xs text-gray-500">Potential users</p>
-                    </CardContent>
-                  </Card>
 
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-sm">Serviceable Market</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">{marketOpportunity.sam.toLocaleString()}</div>
-                      <p className="text-xs text-gray-500">Online shoppers</p>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-sm">Obtainable Market</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">{marketOpportunity.som.toLocaleString()}</div>
-                      <p className="text-xs text-gray-500">Ready adopters</p>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-sm">Revenue Potential</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">${marketOpportunity.potentialRevenue.toLocaleString()}</div>
-                      <p className="text-xs text-gray-500">Annual estimate</p>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Market Opportunity Analysis</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="p-4 bg-green-50 rounded-lg">
-                        <h4 className="font-semibold text-green-800">Key Opportunity</h4>
-                        <p className="text-sm text-green-700 mt-1">
-                          {marketOpportunity.conversionOpportunity}% of the total market shows strong adoption signals, 
-                          representing significant revenue potential of ${marketOpportunity.potentialRevenue.toLocaleString()} annually.
-                        </p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </>
-            )}
-          </TabsContent>
 
           {/* Individual Responses Tab */}
           <TabsContent value="responses" className="space-y-6">
